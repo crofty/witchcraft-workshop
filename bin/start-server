@@ -8,15 +8,17 @@
 # GUI.
 
 MC_SERVER_TYPE="paper"
-MC_VERSION="1.18.2"
-WITCHRAFT_PLUGIN_VERSION="0.7.37"
+MC_VERSION="1.21.8"
+MC_DOWNLOAD_URL=${MC_DOWNLOAD_URL:-https://fill-data.papermc.io/v1/objects/aa6357abc6e54187bf45ceb5c78c2839ca7e22f988659223ff2e7147c1554f61/paper-1.21.8-31.jar}
+
+WITCHRAFT_PLUGIN_VERSION="0.7.40"
 # We go for a conservative heap size of 4Gb, use `MEMORY=8G bin/start-server` to change
 MEMORY="${MEMORY:-4G}"
 
 ###############################################################################
 
 MC_SERVER_JAR="${MC_SERVER_TYPE}-${MC_VERSION}.jar"
-WITCHRAFT_PLUGIN_JAR="witchcraft-plugin-${WITCHRAFT_PLUGIN_VERSION}-for-${MC_SERVER_TYPE}-1.18-shaded.jar"
+WITCHRAFT_PLUGIN_JAR="witchcraft-plugin-${WITCHRAFT_PLUGIN_VERSION}-for-${MC_SERVER_TYPE}-1.21-shaded.jar"
 
 BIN_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)
 cd "$BIN_DIR/../server"
@@ -55,16 +57,17 @@ fi
 
 if [ ! -f "$MC_SERVER_JAR" ]; then
     printf "\033[32m[start-server]\033[0m %s not found, downloading.\n" "${MC_SERVER_JAR}"
-    trace curl --progress-bar -L "https://serverjars.com/api/fetchJar/${MC_SERVER_TYPE}/${MC_VERSION}" -o $MC_SERVER_JAR
+    trace curl ${CURL_OPTS} --progress-bar -L ${MC_DOWNLOAD_URL} -o $MC_SERVER_JAR
 fi
 
 # URLs have conflicting versions, fix plugin release process first
 
 if [ ! -f "plugins/$WITCHRAFT_PLUGIN_JAR" ]; then
-    printf "\033[32m[start-server]\033[0m %s not found, downloading.\n" "plugins/${WITCHRAFT_PLUGIN_JAR}"
+    printf "\033[32m[start-server]\033[0m %s not found, it needs building from witchcraft-plugin repo and copying here.\n" "plugins/${WITCHRAFT_PLUGIN_JAR}"
     mkdir -p plugins
-#    trace curl --progress-bar -L "https://github.com/lambdaisland/witchcraft-plugin/releases/download/v${WITCHRAFT_PLUGIN_VERSION}/${WITCHRAFT_PLUGIN_JAR}" -o "plugins/$WITCHRAFT_PLUGIN_JAR"
-    trace curl --progress-bar -L "https://github.com/lambdaisland/witchcraft-plugin/releases/download/v0.7.35/${WITCHRAFT_PLUGIN_JAR}" -o "plugins/$WITCHRAFT_PLUGIN_JAR"
+    exit
+    # trace curl --progress-bar -L "https://github.com/lambdaisland/witchcraft-plugin/releases/download/v${WITCHRAFT_PLUGIN_VERSION}/${WITCHRAFT_PLUGIN_JAR}" -o "plugins/$WITCHRAFT_PLUGIN_JAR"
+    # trace curl --progress-bar -L "https://github.com/lambdaisland/witchcraft-plugin/releases/download/v0.7.35/${WITCHRAFT_PLUGIN_JAR}" -o "plugins/$WITCHRAFT_PLUGIN_JAR"
 fi
 
 # https://blog.airplane.gg/aikar-flags/
