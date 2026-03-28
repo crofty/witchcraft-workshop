@@ -11,7 +11,7 @@ MC_SERVER_TYPE="paper"
 MC_VERSION="1.21.11"
 MC_DOWNLOAD_URL=${MC_DOWNLOAD_URL:-https://fill-data.papermc.io/v1/objects/ccba49e442580422063c30e1aea452e05372811384df9b71a115367d5ddc5512/paper-1.21.11-54.jar}
 
-WITCHRAFT_PLUGIN_VERSION="0.7.40"
+WITCHRAFT_PLUGIN_VERSION="0.7.41"
 # We go for a conservative heap size of 4Gb, use `MEMORY=8G bin/start-server` to change
 MEMORY="${MEMORY:-4G}"
 
